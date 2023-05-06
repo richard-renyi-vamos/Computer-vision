@@ -1,0 +1,38 @@
+import face_recognition
+
+# Load the known images
+image_of_person_1 = face_recognition.load_image_file("person_1.jpg")
+image_of_person_2 = face_recognition.load_image_file("person_2.jpg")
+
+# Get the face encodings for each person
+person_1_face_encoding = face_recognition.face_encodings(image_of_person_1)[0]
+person_2_face_encoding = face_recognition.face_encodings(image_of_person_2)[0]
+
+# Create a list of known face encodings and their names
+known_face_encodings = [
+    person_1_face_encoding,
+    person_2_face_encoding
+]
+known_face_names = [
+    "Person 1",
+    "Person 2"
+]
+
+# Load the unknown image
+unknown_image = face_recognition.load_image_file("unknown.jpg")
+
+# Get the face encodings for the unknown image
+unknown_face_encodings = face_recognition.face_encodings(unknown_image)
+
+# Loop through each face in the unknown image
+for unknown_face_encoding in unknown_face_encodings:
+    # See if the face is a match for the known faces
+    matches = face_recognition.compare_faces(known_face_encodings, unknown_face_encoding)
+
+    # If a match was found in the known faces, print the name
+    if True in matches:
+        first_match_index = matches.index(True)
+        name = known_face_names[first_match_index]
+        print(f"Match found: {name}")
+    else:
+        print("No match found")
